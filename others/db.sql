@@ -1,0 +1,94 @@
+ALTER TABLE users
+ADD isPenjaga BOOLEAN NOT NULL DEFAULT 0;
+
+CREATE TABLE umum(
+id BIGINT REFERENCES users,
+PRIMARY KEY (id)
+);
+
+ALTER TABLE umum 
+ADD CONSTRAINT fk_umum 
+FOREIGN KEY(id) REFERENCES users(id);
+
+CREATE TABLE penjaga(
+id BIGINT REFERENCES users,
+PRIMARY KEY(id)
+);
+
+ALTER TABLE penjaga 
+ADD CONSTRAINT fk_penjaga
+FOREIGN KEY(id) REFERENCES users(id);
+
+ALTER TABLE penjaga
+ADD id_wisata INT REFERENCES wisata;
+
+ALTER TABLE penjaga
+ADD CONSTRAINT fk_penjaga2
+FOREIGN KEY(id_wisata) REFERENCES wisata(id);
+
+CREATE TABLE wisata(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+nama VARCHAR(255) NOT NULL,
+deskripsi VARCHAR(255),
+harga FLOAT NOT NULL,
+alamat VARCHAR(255) NOT NULL,
+waktu_opr DATETIME NOT NULL,
+max_visitor INT NOT NULL,
+lat DECIMAL(10,8) NOT NULL,
+lng DECIMAL(11,8) NOT NULL,
+foto BLOB
+);
+
+CREATE TABLE tiket(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_wisata INT NOT NULL REFERENCES wisata,
+nama VARCHAR(255),
+harga FLOAT
+);
+
+ALTER TABLE tiket
+ADD CONSTRAINT fk_tiket
+FOREIGN KEY(id_wisata) REFERENCES wisata(id);
+
+CREATE TABLE metode_bayar(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+nama VARCHAR(255)
+);
+
+CREATE TABLE pembayaran(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_metode INT REFERENCES metode_bayar,
+STATUS INT
+);
+
+ALTER TABLE pembayaran
+ADD CONSTRAINT fk_bayar1
+FOREIGN KEY(id_metode) REFERENCES metode_bayar(id);
+
+CREATE TABLE booking(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_bayar INT REFERENCES pembayaran,
+id_user BIGINT REFERENCES users,
+id_tiket INT REFERENCES tiket,
+tgl DATETIME,
+jml_pesan INT
+);
+
+ALTER TABLE pembayaran
+ADD id_booking INT REFERENCES booking;
+
+ALTER TABLE pembayaran
+ADD CONSTRAINT fk_bayar2
+FOREIGN KEY(id_booking) REFERENCES booking(id);
+
+ALTER TABLE booking
+ADD CONSTRAINT fk_book1
+FOREIGN KEY(id_bayar) REFERENCES pembayaran(id);
+
+ALTER TABLE booking
+ADD CONSTRAINT fk_book2
+FOREIGN KEY(id_user) REFERENCES users(id);
+
+ALTER TABLE booking
+ADD CONSTRAINT fk_book3
+FOREIGN KEY(id_tiket) REFERENCES tiket(id);
