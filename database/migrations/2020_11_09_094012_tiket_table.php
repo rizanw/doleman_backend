@@ -15,13 +15,10 @@ class TiketTable extends Migration
     {
         Schema::create('tiket', function(Blueprint $table){
             $table->increments('tiket_id');
-
-            $table->integer('id_bayar');
-            $table->foreign('id_bayar')->references('pembayaran_id')->on('pembayaran')->onDelete('cascade')->onUpdate('cascade');
             
-            $table->integer('id_wisata');
+            $table->unsignedInteger('id_wisata');
             $table->foreign('id_wisata')->references('wisata_id')->on('wisata')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('tiket_nama')->nullable();
+            $table->string('tiket_nama')->nullable();
             $table->integer('harga')->nullable();
             $table->timestamps();
         });

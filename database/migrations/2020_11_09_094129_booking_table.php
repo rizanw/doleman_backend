@@ -15,13 +15,13 @@ class BookingTable extends Migration
     {
         Schema::create('booking', function(Blueprint $table){
             $table->increments('booking_id');
-            $table->integer('id_bayar');
+            $table->unsignedInteger('id_bayar');
             $table->foreign('id_bayar')->references('pembayaran_id')->on('pembayaran')->onDelete('cascade')->onUpdate('cascade');
             
-            $table->integer('id_pengguna');
+            $table->unsignedInteger('id_pengguna');
             $table->foreign('id_pengguna')->references('pengguna_id')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
             
-            $table->integer('id_tiket');
+            $table->unsignedInteger('id_tiket');
             $table->foreign('id_tiket')->references('tiket_id')->on('tiket')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('jml_pesan')->nullable();
             $table->timestamps();

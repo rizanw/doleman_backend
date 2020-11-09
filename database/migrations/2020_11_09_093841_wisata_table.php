@@ -25,7 +25,7 @@ class WisataTable extends Migration
             $table->string('wisata_deskripsi')->nullable();
             $table->string('foto')->nullable();
 
-            $table->integer('id_pengguna');
+            $table->unsignedInteger('id_pengguna');
             $table->foreign('id_pengguna')->references('pengguna_id')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
         });
     }
