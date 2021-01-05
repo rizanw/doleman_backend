@@ -4,7 +4,12 @@ module.exports = (mongoose) => {
       name: String,
       email: String,
       password: String,
-      type: Number,
+      roles: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "role",
+        },
+      ],
     },
     { timestamps: true }
   );

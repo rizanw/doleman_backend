@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
+const Role = db.role;
+
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -24,11 +26,38 @@ db.mongoose
   })
   .then(() => {
     console.log("Connected to the database!");
+    initial();
   })
   .catch((err) => {
     console.log("Cannot connect to the database!", err);
     process.exit();
   });
+
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "wisatawan",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'wisatawan' to roles collection");
+      });
+
+      new Role({
+        name: "pengelola",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'pengelola' to roles collection");
+      });
+    }
+  });
+}
 
 // simple route
 app.get("/", (req, res) => {
@@ -37,7 +66,9 @@ app.get("/", (req, res) => {
   });
 });
 
+//routes
 require("./app/routes/user.routes")(app);
+require("./app/routes/auth.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
