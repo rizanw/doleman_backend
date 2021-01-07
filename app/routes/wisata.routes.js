@@ -10,4 +10,8 @@ module.exports = function (app) {
   });
 
   app.get("/api/wisata/all", controller.all);
+
+  app.post("/api/wisata/nearby", controller.all);
+
+  app.post("/api/wisata", controller.wisataBoard);
 };

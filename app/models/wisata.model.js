@@ -8,20 +8,16 @@ module.exports = (mongoose) => {
       day: [String],
       hour: [String],
     },
-    location: {
-      address: String,
+    address: {
+      street: String,
       city: String,
       province: String,
-      coordinate: [Number],
-      type: String,
+    },
+    location: {
+      coordinates: [Number],
+      type: { type: String },
     },
     images: String,
-  });
-
-  schema.method("toJSON", function () {
-    const { __v, _id, ...object } = this.toObject();
-    object.id = _id;
-    return object;
   });
 
   const wisata = mongoose.model("wisata", schema);
