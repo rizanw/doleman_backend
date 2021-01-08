@@ -10,6 +10,16 @@ module.exports = (mongoose) => {
           ref: "role",
         },
       ],
+      adminOn: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "wisata",
+      },
+      favorites: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "wisata",
+        },
+      ],
     },
     { timestamps: true }
   );

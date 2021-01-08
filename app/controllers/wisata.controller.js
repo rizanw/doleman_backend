@@ -30,7 +30,8 @@ exports.nearby = (req, res) => {
 };
 
 exports.wisataBoard = (req, res) => {
-  Wisata.findOne({ name: req.body.name }, function (err, wisata) {
+  Wisata.findOne({ _id: req.body.id }, function (err, wisata) {
     res.send(wisata);
   });
 };
+ 

@@ -2,6 +2,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const Wisata = db.wisata;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -22,6 +23,24 @@ exports.signup = (req, res) => {
       return;
     }
 
+    if (req.body.adminOn) {
+      Wisata.findOne(
+        {
+          name: req.body.adminOn,
+        },
+        (err, wisata) => {
+          if (err) {
+            res.status(500).send({
+              success: false,
+              message: err,
+            });
+            return;
+          }
+          user.adminOn = wisata._id;
+        }
+      );
+    }
+
     if (req.body.roles) {
       Role.find(
         {
@@ -35,7 +54,6 @@ exports.signup = (req, res) => {
             });
             return;
           }
-
           user.roles = roles.map((role) => role._id);
           user.save((err) => {
             if (err) {
@@ -97,6 +115,7 @@ exports.signin = (req, res) => {
     email: req.body.email.toLowerCase(),
   })
     .populate("roles", "-__v")
+    .populate("wisatas", "-__v")
     .exec((err, user) => {
       if (err) {
         res.status(500).send({
@@ -135,11 +154,17 @@ exports.signin = (req, res) => {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
 
+      var adminOn = false;
+      if (user.adminOn) {
+        adminOn = user.adminOn;
+      }
+
       res.status(200).send({
         id: user._id,
         name: user.name,
         email: user.email,
         roles: authorities,
+        adminOn: adminOn,
         accessToken: token,
         success: true,
         message: "login successfully",
