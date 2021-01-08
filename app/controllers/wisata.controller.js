@@ -19,7 +19,7 @@ exports.nearby = (req, res) => {
             type: "Point",
             coordinates: [lo, la],
           },
-          $maxDistance: 10000,
+          $maxDistance: 100,
         },
       },
     },
