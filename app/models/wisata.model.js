@@ -17,7 +17,7 @@ module.exports = (mongoose) => {
       coordinates: [Number],
       type: { type: String },
     },
-    images: String,
+    images: [String],
   });
 
   const wisata = mongoose.model("wisata", schema);
