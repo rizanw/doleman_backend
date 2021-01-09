@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var path = require('path');
 
 const app = express();
 
@@ -61,9 +62,13 @@ function initial() {
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to doleman server. ssssssssttt.. its private!",
-  });
+  res.sendFile(path.join(__dirname + "/app/views/tos.html"));
+});
+app.get("/privacy-policy", function (req, res) {
+  res.sendFile(path.join(__dirname + "/app/views/privacy.html"));
+});
+app.get("/terms-and-conditions", function (req, res) {
+  res.sendFile(path.join(__dirname + "/app/views/tos.html"));
 });
 
 //routes
