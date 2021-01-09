@@ -14,10 +14,10 @@ exports.today = (req, res) => {
     },
     update = {
       $setOnInsert: {
-        wisata: req.body.wisata,
         date: new Date(),
+        wisata: req.body.wisata,
         in: 0,
-        out: 0,
+        total: 0,
         capacity: 2000,
       },
     },
@@ -36,7 +36,7 @@ exports.incToday = (req, res) => {
       $lte: moment(today).endOf("day").toDate(),
     },
   };
-  var update = { $inc: { in: 1 } };
+  var update = { $inc: { in: 1, total: 1 } };
 
   Crowd.findOneAndUpdate(query, update, {}, function (err, statistic) {
     res.send(statistic);

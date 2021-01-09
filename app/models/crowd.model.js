@@ -6,7 +6,7 @@ module.exports = (mongoose) => {
     },
     date: Date,
     in: Number,
-    out: Number,
+    total: Number,
     capacity: Number,
   });
 
