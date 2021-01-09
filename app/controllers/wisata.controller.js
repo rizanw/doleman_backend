@@ -29,6 +29,10 @@ exports.nearby = (req, res) => {
   );
 };
 
+exports.updateCrowdedness = (req, res) => {
+  Wisata.findOneAndUpdate
+};
+
 exports.wisataBoard = (req, res) => {
   Wisata.findOne({ _id: req.body.id }, function (err, wisata) {
     res.send(wisata);

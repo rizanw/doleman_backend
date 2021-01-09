@@ -1,6 +1,7 @@
 const moment = require("moment");
 const db = require("../models");
 const Crowd = db.crowd;
+const Wisata = db.wisata;
 
 const today = moment().startOf("day");
 
@@ -39,6 +40,15 @@ exports.incToday = (req, res) => {
   var update = { $inc: { in: 1, total: 1 } };
 
   Crowd.findOneAndUpdate(query, update, {}, function (err, statistic) {
+    var crowdedness = (statistic.in / statistic.capacity) * 100;
+    Wisata.findOneAndUpdate(
+      { _id: req.body.wisata },
+      { crowdedness: crowdedness },
+      {},
+      function (err, wisata) {
+        console.log(wisata);
+      }
+    );
     res.send(statistic);
   });
 };

@@ -18,6 +18,7 @@ module.exports = (mongoose) => {
       type: { type: String },
     },
     images: [String],
+    crowdedness: Number,
   });
 
   const wisata = mongoose.model("wisata", schema);
