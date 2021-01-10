@@ -6,17 +6,40 @@ const crypto = require("crypto");
 
 exports.fetchAllByUser = (req, res) => {
   User.findOne({ email: req.body.user }, function (err, user) {
+    if (err) {
+      res.send({
+        success: false,
+        message: err,
+      });
+      return;
+    }
     if (!user) {
       Ticket.find({ user: req.body.user })
         .populate("wisata")
         .exec(function (err, tickets) {
+          if (err) {
+            res.send({
+              success: false,
+              message: err,
+            });
+            return;
+          }
           res.send(tickets);
+          return;
         });
     } else {
       Ticket.find({ user: user._id })
         .populate("wisata")
         .exec(function (err, tickets) {
+          if (err) {
+            res.send({
+              success: false,
+              message: err,
+            });
+            return;
+          }
           res.send(tickets);
+          return;
         });
     }
   });
