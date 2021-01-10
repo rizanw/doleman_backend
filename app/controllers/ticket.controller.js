@@ -2,7 +2,11 @@ const db = require("../models");
 const Ticket = db.ticket;
 const User = db.user;
 const Wisata = db.wisata;
+const Crowd = db.crowd;
 const crypto = require("crypto");
+const moment = require("moment");
+
+const today = moment().startOf("day");
 
 exports.fetchAllByUser = (req, res) => {
   User.findOne({ email: req.body.user }, function (err, user) {
@@ -58,6 +62,14 @@ exports.confirmTicket = (req, res) => {
   var update = { status: req.body.status };
 
   Ticket.findOneAndUpdate(query, update, function (err, ticket) {
+    if (err) {
+      res.status(500).send({
+        success: false,
+        message: err,
+      });
+      return;
+    }
+
     res.send(ticket);
   });
 };
@@ -70,10 +82,57 @@ exports.checkTicket = (req, res) => {
       $lte: moment(today).endOf("day").toDate(),
     },
   };
-  var update = { status: req.body.status };
+  var update = { status: "CHECKEDIN" };
 
   Ticket.findOneAndUpdate(query, update, function (err, ticket) {
-    res.send(ticket);
+    if (err) {
+      res.status(500).send({
+        success: false,
+        message: err,
+      });
+      return;
+    }
+    if (ticket == null) {
+      res.send({
+        success: false,
+        message: "Gagal! periksa kembali kode atau tanggal tiket.",
+      });
+      return;
+    }
+
+    var query = {
+      wisata: ticket.wisata,
+      date: {
+        $gte: today.toDate(),
+        $lte: moment(today).endOf("day").toDate(),
+      },
+    };
+    Crowd.findOneAndUpdate(
+      query,
+      { $inc: { in: 1, total: 1 } },
+      { upsert: true },
+      function (err, statistic) {
+        var crowdedness = (statistic.in / statistic.capacity) * 100;
+        Wisata.findOneAndUpdate(
+          { _id: ticket.wisata },
+          { crowdedness: crowdedness },
+          {},
+          function (err, wisata) {
+            if (err) {
+              res.status(500).send({
+                success: false,
+                message: err,
+              });
+              return;
+            }
+          }
+        );
+      }
+    );
+    res.send({
+      success: true,
+      message: update,
+    });
   });
 };
 

@@ -104,6 +104,7 @@ exports.signup = (req, res) => {
       email: user.email,
       roles: authorities,
       accessToken: token,
+      favorites: user.favorites,
       success: true,
       message: "registered successfully!",
     });
@@ -168,6 +169,7 @@ exports.signin = (req, res) => {
         accessToken: token,
         success: true,
         message: "login successfully",
+        favorites: user.favorites,
       });
     });
 };

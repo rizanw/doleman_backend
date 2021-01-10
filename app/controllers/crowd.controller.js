@@ -38,15 +38,22 @@ exports.incToday = (req, res) => {
     },
   };
   var update = { $inc: { in: 1, total: 1 } };
+  options = { upsert: true };
 
-  Crowd.findOneAndUpdate(query, update, {}, function (err, statistic) {
+  Crowd.findOneAndUpdate(query, update, options, function (err, statistic) {
     var crowdedness = (statistic.in / statistic.capacity) * 100;
     Wisata.findOneAndUpdate(
       { _id: req.body.wisata },
       { crowdedness: crowdedness },
       {},
       function (err, wisata) {
-        console.log(wisata);
+        if (err) {
+          res.status(500).send({
+            success: false,
+            message: err,
+          });
+          return;
+        }
       }
     );
     res.send(statistic);
