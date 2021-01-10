@@ -75,6 +75,7 @@ exports.confirmTicket = (req, res) => {
 };
 
 exports.checkTicket = (req, res) => {
+  console.log("checkin: ", req.body);
   var query = {
     code: req.body.code,
     wisata: req.body.wisata,

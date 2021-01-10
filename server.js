@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-var path = require('path');
-
+var path = require("path");
 const app = express();
 
 var corsOptions = {
@@ -70,6 +69,16 @@ app.get("/privacy-policy", function (req, res) {
 app.get("/terms-and-conditions", function (req, res) {
   res.sendFile(path.join(__dirname + "/app/views/tos.html"));
 });
+app.get("/pengelola/regis", (req, res) => {
+  res.sendFile(path.join(__dirname + "/app/views/regis-admin.html"));
+});
+const controller = require("./app/controllers/auth.controller");
+const { verifySignUp } = require("./app/middlewares");
+app.post(
+  "/pengelola/regis",
+  [verifySignUp.checkDuplicateEmail, verifySignUp.checkRolesExisted],
+  controller.signup
+);
 
 //routes
 require("./app/routes/user.routes")(app);
