@@ -5,6 +5,10 @@ const Wisata = db.wisata;
 
 const today = moment().startOf("day");
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max)) + 1;
+}
+
 exports.today = (req, res) => {
   var query = {
       wisata: req.body.wisata,
@@ -19,7 +23,7 @@ exports.today = (req, res) => {
         wisata: req.body.wisata,
         in: 0,
         total: 0,
-        capacity: 2000,
+        capacity: 200 * getRandomInt(5),
       },
     },
     options = { upsert: true };
