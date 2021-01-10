@@ -5,8 +5,16 @@ const Wisata = db.wisata;
 const crypto = require("crypto");
 
 exports.fetchAllByUser = (req, res) => {
-  Ticket.find({ user: req.body.user }, function (err, tickets) {
-    res.send(tickets);
+  User.findOne({ email: req.body.user }, function (err, user) {
+    if (!user) {
+      Ticket.find({ user: req.body.user }, function (err, tickets) {
+        res.send(tickets);
+      });
+    } else {
+      Ticket.find({ user: user._id }, function (err, tickets) {
+        res.send(tickets);
+      });
+    }
   });
 };
 
@@ -102,9 +110,11 @@ exports.buyTicket = (req, res) => {
       }
     );
 
+    console.log(ticket);
+
     res.status(200).send({
       id: ticket._id,
-      user: ticket.user,
+      user: req.body.user,
       wisata: ticket.wisata,
       code: ticket.code,
       date: ticket.date,
