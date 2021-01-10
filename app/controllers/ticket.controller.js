@@ -77,6 +77,7 @@ exports.confirmTicket = (req, res) => {
 exports.checkTicket = (req, res) => {
   var query = {
     code: req.body.code,
+    wisata: req.body.wisata,
     date: {
       $gte: today.toDate(),
       $lte: moment(today).endOf("day").toDate(),
@@ -95,7 +96,7 @@ exports.checkTicket = (req, res) => {
     if (ticket == null) {
       res.send({
         success: false,
-        message: "Gagal! periksa kembali kode atau tanggal tiket.",
+        message: "Periksa kembali tiket.",
       });
       return;
     }
