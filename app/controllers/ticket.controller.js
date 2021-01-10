@@ -7,13 +7,17 @@ const crypto = require("crypto");
 exports.fetchAllByUser = (req, res) => {
   User.findOne({ email: req.body.user }, function (err, user) {
     if (!user) {
-      Ticket.find({ user: req.body.user }, function (err, tickets) {
-        res.send(tickets);
-      });
+      Ticket.find({ user: req.body.user })
+        .populate("wisata")
+        .exec(function (err, tickets) {
+          res.send(tickets);
+        });
     } else {
-      Ticket.find({ user: user._id }, function (err, tickets) {
-        res.send(tickets);
-      });
+      Ticket.find({ user: user._id })
+        .populate("wisata")
+        .exec(function (err, tickets) {
+          res.send(tickets);
+        });
     }
   });
 };
