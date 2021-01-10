@@ -112,7 +112,7 @@ exports.checkTicket = (req, res) => {
       { $inc: { in: 1, total: 1 } },
       { upsert: true },
       function (err, statistic) {
-        var crowdedness = (statistic.in / statistic.capacity) * 100;
+        var crowdedness = ((statistic.in + 1) / (statistic.capacity + 1)) * 100;
         Wisata.findOneAndUpdate(
           { _id: ticket.wisata },
           { crowdedness: crowdedness },
@@ -127,12 +127,19 @@ exports.checkTicket = (req, res) => {
             }
           }
         );
+        res.send({
+          success: true,
+          data: {
+            wisata: statistic.wisata,
+            date: statistic.date,
+            in: statistic.in + 1,
+            total: statistic.total + 1,
+            capacity: statistic.capacity,
+          },
+          message: update,
+        });
       }
     );
-    res.send({
-      success: true,
-      message: update,
-    });
   });
 };
 

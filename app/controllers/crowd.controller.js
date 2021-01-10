@@ -45,7 +45,7 @@ exports.incToday = (req, res) => {
   options = { upsert: true };
 
   Crowd.findOneAndUpdate(query, update, options, function (err, statistic) {
-    var crowdedness = (statistic.in / statistic.capacity) * 100;
+    var crowdedness = ((statistic.in + 1) / (statistic.capacity + 1)) * 100;
     Wisata.findOneAndUpdate(
       { _id: req.body.wisata },
       { crowdedness: crowdedness },
