@@ -10,6 +10,7 @@ db.user = require("./user.model")(mongoose);
 db.role = require("./role.model")(mongoose);
 db.wisata = require("./wisata.model")(mongoose);
 db.crowd = require("./crowd.model")(mongoose);
+db.ticket = require("./ticket.model")(mongoose);
 
 db.ROLES = ["wisatawan", "pengelola"];
 
